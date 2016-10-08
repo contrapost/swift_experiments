@@ -239,6 +239,35 @@ frog.isAlive     // false
 
 */
 
+protocol LivingBeingProtocol {
+    func isAlive() -> Bool
+    var birthDate : Date { get set }
+    var deathDate : Date? { get set }
+}
+
+extension LivingBeingProtocol {
+    func isAlive() -> Bool {
+        if deathDate == nil {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+class Frog2 : LivingBeingProtocol {
+    internal var deathDate: Date?
+    internal var birthDate: Date
+    
+    init(birthDate : Date) {
+        self.birthDate = birthDate
+    }
+}
+
+var frog = Frog2(birthDate: Date())
+frog.isAlive()
+frog.deathDate = Date()
+frog.isAlive()
 
 
 /*:
@@ -256,8 +285,36 @@ println("Kunne ikke hente gatenavn")
 
 */
 
+class School {
+    var students : [Student]? = []
+}
+
+class Student {
+    
+    var address : Address?
+    
+}
+
+class Address {
+    var street : String
+    
+    init() {
+        street = "some default street"
+    }
+    
+    func buildFullStreetName() -> String {
+        return street
+    }
+}
+
+var westerdals = School()
 
 
+if let street = westerdals.students?.first?.address?.street {
+    print("Studenten bor i \(street).")
+} else {
+    print("Kunne ikke hente gatenavn")
+}
 
 
 /*:
@@ -275,7 +332,21 @@ println("Det var ikke mulig å sette en ny addresse")
 
 */
 
+let student = Student()
+student.address = Address()
+student.address?.street
+westerdals.students?.append(student)
+print(westerdals.students?.first?.address?.street)
 
+westerdals.students?.first
+
+let otherAddress = Address()
+
+if (westerdals.students?.first?.address = otherAddress) != nil {
+    print("Du satt en ny addresse")
+} else {
+    print("Det var ikke mulig å sette en ny addresse")
+}
 
 /*:
 ## Oppgave 8
@@ -292,9 +363,19 @@ println("Kunne ikke hente fullstendig gatenavn")
 
 */
 
+extension School {
+    subscript(ind : Int) -> Student? {
+        guard ind >= 0 && ind < (students?.count)!
+            else { return nil }
+        return students?[ind]
+    }
+}
 
-
-
+if let fullStreetName = westerdals.students?[0].address?.buildFullStreetName() {
+    print("Fullstendig gatenavn er \(fullStreetName)")
+} else {
+    print("Kunne ikke hente fullstendig gatenavn")
+}
 
 /*:
 
@@ -304,12 +385,31 @@ println("Kunne ikke hente fullstendig gatenavn")
 
 ```swift
 "AB".length // 2
-"AB".reverse() // Skal printe ut BA
+"AB".reverses() // Skal printe ut BA
 "Abba".contains("AbA") // Skal printe ut false
 "Abba".contains("Abb") // SKal printe ut true
 ```
 */
 
+extension String {
+    var length : Int {
+        return self.characters.count
+    }
+    
+    func reverse() -> String {
+        return String(self.characters.reversed())
+    }
+    
+    func contains(substring : String) -> Bool {
+        self.contains(substring)
+        return false
+    }
+}
+
+"AB".length
+"AB".reverse()
+"Abba".contains("AbA")
+"Abba".contains("Abb")
 
 
 /*:
@@ -330,6 +430,22 @@ thirdArray.thirdElementInArray()    // nil
 ```
 */
 
+extension Array {
+    func thirdElementInArray() -> AnyObject? {
+        guard self.count >= 3 else {
+            return nil
+        }
+        return self[2] as AnyObject
+    }
+}
+
+let anArray = [3,4,24,33]
+let anotherArray = ["hello", "world", "!"]
+let thirdArray = [23.3]
+
+anArray.thirdElementInArray()    // 24
+anotherArray.thirdElementInArray()    // !
+thirdArray.thirdElementInArray()    // nil
 
 /*:
 
@@ -353,7 +469,47 @@ func createUser() {
 
 */
 
+enum state {
+    case Ready
+    case Notready
+}
 
+let isOnline = true
+let hasTakenBackup = true
+let readyState = state.Ready
+let name : String? = "User login screen"
+
+
+func createUser(isOnline : Bool, hasTakenBackup : Bool, readyState : state, name : String?) -> String? {
+    if isOnline {
+        if hasTakenBackup {
+            switch readyState {
+            case .Ready:
+                return name
+            default:
+                return "User isn't ready"
+            }
+        } else {
+            return "Has no backup"
+        }
+    } else {
+        return "Not online"
+    }
+}
+
+func createUser2(isOnline : Bool, hasTakenBackup : Bool, readyState : state, name : String?) -> String? {
+    guard isOnline else { return "Not online" }
+    guard hasTakenBackup else {return "Has no backup" }
+    switch readyState {
+    case .Ready:
+        return name
+    default:
+        return "User isn't ready"
+    }
+}
+
+createUser(isOnline: isOnline, hasTakenBackup: false, readyState: state.Ready, name: nil)
+createUser2(isOnline: isOnline, hasTakenBackup: true, readyState: state.Notready, name: nil)
 
 /*:
 
@@ -372,9 +528,35 @@ car1 + nil     // ["Tesla" : car1]
 */
 
 
+class Car : Hashable {
+    let modelName : String
+    
+    public var hashValue: Int {
+        return modelName.hash
+    }
+    
+    init(modelName : String) {
+        self.modelName = modelName
+    }
+}
 
+func ==(lhs : Car, rhs : Car) -> Bool {
+    if lhs.hashValue == rhs.hashValue {
+            return true
+        }
+    return false
+}
 
+extension Car {
+    static func +(car1: Car, car2: Car) -> [String : Car] {
+        return [car1.modelName : car1, car2.modelName : car2]
+    }
+}
 
+let car1 = Car(modelName: "B")
+let car2 = Car(modelName: "A")
+
+car1 + car2
 
 /*:
 
@@ -383,6 +565,24 @@ car1 + nil     // ["Tesla" : car1]
 Lag en [Any] med 5 forskjellige objekter, løp gjennom arrayet og bruk switch for å printe de forskjellige objektene hvor du skriver ut klassens navn og hvor mange av dem du har funnet til nå.
 
 */
+
+let anyArray : [Any] = ["28", 28, 25.7, Date()]
+
+for each in anyArray {
+    switch each {
+    case is String:
+        print("String \(each)")
+    case is Int:
+        print("Int: \(each)")
+    case is Double:
+        print("Double: \(each)")
+    case is Date:
+        print("Date: \(each)")
+    default:
+        break
+    }
+}
+
 /*:
 
 #Oppgave 15
@@ -399,3 +599,19 @@ printAllStrings(anyObjectArray)      // printer: Omg
 
 
 */
+
+func printAllStrings<T: Collection>(elements: T) {
+    for element in elements {
+        if element is String {
+            print(element)
+        }
+    }
+}
+
+let intArray = [ 234, 34 ,33]
+let stringArray = [ "hello", "world" ]
+let anyObjectArray : [Any] = ["Omg", 234, 342.3]
+
+printAllStrings(elements: intArray)
+printAllStrings(elements: stringArray)         // printer: Hello   world
+printAllStrings(elements: anyObjectArray)
