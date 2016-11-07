@@ -212,32 +212,46 @@ secondFalcon.launch(date: Date())
 let waterRocket = Falcon9(fuelType: .water, fuelLevel: 400)
 waterRocket.launch()
 
+
 // Oppgave 2
 
 // a)
 
 /*
- Forklar rollen til en delegate og hva den brukes til. Gi eksempler på klasser i Cocoa
- Touch (iOS) som implementerer delegate-patternet.
+ Delegation is a programming pattern in which one object in a program (delegate) acts on behalf of another (delegating object). The delegating object sends messages to the delegate with information about action that the delegating object performed/ is about to perform. The delegate reacts on the message by changing own status or changing another objects.
+ We can use delegating pattern in Cocoa Touch by implementing protocols, for example UITextFieldDelegate, i.e. by customizing methods that delegate should have to implement a protocol. 
+ If we use UITableView we have to implement a method that supplies UITableView with information about number of rows (numberOfRowsInSection), so we create a delegate of UITableView.
  */
 
 // b)
 
 /*
-Hva er oppgaven til en view controller? Forklar og illustrer
+1. View controller manages the hierarchy of views. It has a root view that view controller has a reference to. The root view can have a hierarchy of views that have a strong reference to their subviews.
+ =====================
+ =                   =          ==============
+ =                   =--------> = Root view  =
+ =  View Controller  =          ==============
+ =                   =                 |
+ =                   =           ______|_____
+ =====================           |          |
+                                 V          V
+                        ==============  ==============
+                        =    View    =  =    View    =
+                        ==============  ==============
+ 
+ 2. View controller is a connecting point between views it manages and application data, i.e view controller translate the data to visual representation.
+ 3. View controller handles user interactions by for example implementing protocols and being delegate of different delegating objects. 
+ 4. View controller manages resources. For example by implementing didReceiveMemoryWarning method view controller can inform the app that it should free up any resources that are no longer needed. 
+ 5. View controller adapts its views to the environment (for ex. different sizes of devices).
  */
 
 // c) 
 
 /*
- Nedenfor er et bilde fra Photos-appen i iOS. Forklar hvordan du ville implementert å
- vise et eksempelbilde på skjermen etter brukeren trykker på “Get Started”-knappen.
  */
 
 // d)
 
 /*
- Forklar hva rollen til en UINavigationController er, og hvordan man bruker den
- sammen med en eller flere UIViewController hvis du skulle laget en app som skulle vise en liste
- over kontaktene dine, og detaljvisningen for en enkelt av de kontaktene. Tegn og forklar.
+ UINavigationController is a special implementaton of a view controller that manages navigation of a hierarchical content. It contains an array of view controllers that represents some hierarchical data structure, the application deals with. UINavigationController controlls navigation between view controlles and manages UINavigationBar and UIToolbar.
  */
